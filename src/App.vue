@@ -14,29 +14,38 @@
 let array = $ref([]) 
 let delta = [-21, -20, -19, -1, 1, 19, 20, 21], ok = 0
 let clock = null
+
 for (let i = 0; i < 400; i++) array.push({style: 'background-color: orangered', show: true})
 function change(array) {
   array.show = !array.show;
   array.style = array.show ?'background-color: orangered':'background-color: white'
 }
 function game() {
+  let b = [], d = []
   for (let i = 0; i < 400; i++) {
     let neigh = 0
     for (let j = 0; j < 8; j++) {
       let x = i + delta[j]
-      if (0 <= x && x % 10 != 0 && x % 10 != 9 && x < 400) {
+      if (0 <= x && x % 20 != 0 && x % 20 != 19 && x < 400) {
         if (!array[x].show) neigh += 1
       }
     }
-    if (neigh == 3 || (neigh == 2 && !array[i].show)) array[i].show = false
-    else array[i].show = true
+    if (neigh == 3 || (neigh == 2 && !array[i].show)) b.push(i)
+    else d.push(i) 
   }
-  for (let i = 0; i < 400; i++) {
-    if (!array[i].show) array[i].style = 'background-color: white'
-    else array[i].style = 'background-color: orangered'
+  
+  for (let i = 0; i < b.length; i++) {
+    array[b[i]].show = false
+    array[b[i]].style = 'background-color: white'
   }
+  for (let i = 0; i < d.length; i++) {
+    array[d[i]].show = true
+    array[d[i]].style = 'background-color: orangered'
+  }
+  console.log(b)
 }
 function turn() {
+  
   ok = !ok;
   if (ok) clock = setInterval(() => game(), 1000)
   else clearInterval(clock)  
@@ -58,6 +67,7 @@ function turn() {
 
 <style>
   .item_1 {
+    font-family: Helvgetica;
     display: flex;
     justify-content: space-between;
     align-items: center;
